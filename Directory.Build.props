@@ -41,6 +41,7 @@
     <SymbolPackageFormat>snupkg</SymbolPackageFormat>
     <PackageTags>nacos;configuration;service-discovery;grpc;dotnet</PackageTags>
     <PackageReadmeFile>README.md</PackageReadmeFile>
+    <PackageIcon>icon.png</PackageIcon>
 
     <!-- MinVer derives the version from git tags; 0.1.0-preview.0 before the first tag. -->
     <MinVerTagPrefix>v</MinVerTagPrefix>
@@ -67,6 +68,9 @@
   <ItemGroup Condition="'$(IsPackable)' == 'true'">
     <PackageReference Include="MinVer" PrivateAssets="all" />
     <PackageReference Include="Microsoft.SourceLink.GitHub" PrivateAssets="all" />
+    <!-- The icon is shared by every package, so it travels with the shared metadata
+         instead of being repeated in seven project files. -->
+    <None Include="$(MSBuildThisFileDirectory)assets\icon.png" Pack="true" PackagePath="\" Visible="false" />
   </ItemGroup>
 
   <ItemGroup Condition="'$(EnablePublicApiAnalyzers)' == 'true'">
