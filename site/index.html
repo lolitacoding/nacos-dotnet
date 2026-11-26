@@ -68,7 +68,7 @@
     <div class="hero-glow" aria-hidden="true"></div>
     <div class="wrap hero-inner">
       <div class="hero-copy">
-        <p class="eyebrow"><span class="dot" aria-hidden="true"></span>预览版 0.1.0-preview 准备中</p>
+        <p class="eyebrow"><span class="dot" aria-hidden="true"></span>0.1.0-preview.0 · 尚未发布，从源码构建</p>
         <h1>把 Nacos 3 接进 .NET<br><em>不该是一场翻译工作。</em></h1>
         <p class="lede">
           <strong>Lolitacoding.Nacos</strong> 是只面向 <strong>.NET 11</strong> 与 <strong>Nacos 3.x</strong> 的客户端 SDK：
@@ -81,8 +81,8 @@
         </div>
         <dl class="hero-stats">
           <div><dt>目标框架</dt><dd>net11.0</dd></div>
-          <div><dt>单元测试</dt><dd>926</dd></div>
-          <div><dt>集成测试</dt><dd>64</dd></div>
+          <div><dt>单元测试</dt><dd>1083</dd></div>
+          <div><dt>集成测试</dt><dd>77</dd></div>
           <div><dt>构建警告</dt><dd>0</dd></div>
         </dl>
       </div>
@@ -157,7 +157,7 @@ Console.WriteLine(result.Exists ? result.Content : <span class="tok-str">"(not s
         <article class="card">
           <p class="card-num">06</p>
           <h3>Aspire 里起一个 Nacos</h3>
-          <p>AppHost 里 <code>AddNacos("nacos")</code> 拉容器、注入连接串，客户端用 <code>AddNacosClient()</code> 接上；本地开发不必先手动装一个服务端。</p>
+          <p>AppHost 里 <code>AddNacos("nacos")</code> 拉容器，宿主端口交给 Aspire 分配；客户端用 <code>AddNacosClient()</code> 读取注入的地址与 gRPC 端口，本地开发不必先手动装一个服务端。</p>
         </article>
       </div>
 
@@ -178,7 +178,7 @@ Console.WriteLine(result.Exists ? result.Content : <span class="tok-str">"(not s
         <p class="kicker">02 — 版本</p>
         <h2>你的服务端能提供什么</h2>
         <p class="section-lede">
-          Nacos 3 的各模块不是同一批发布的。这张表是客户端判断能力的依据，也是 CI 里那三个镜像的来源。
+          Nacos 3 的各模块不是同一批发布的。这张表是客户端判断能力的依据；CI 的六个镜像固定在三代服务端上：3.0.2、3.2.4 和 3.3.0-RC。
         </p>
       </header>
 
@@ -189,12 +189,12 @@ Console.WriteLine(result.Exists ? result.Content : <span class="tok-str">"(not s
             <tr><th scope="col">能力</th><th scope="col">需要的 Nacos</th><th scope="col">说明</th></tr>
           </thead>
           <tbody>
-            <tr><th scope="row">配置中心 · 服务发现 · 鉴权</th><td><span class="tag">3.x</span></td><td>核心 gRPC 协议与 v3 HTTP OpenAPI。</td></tr>
-            <tr><th scope="row">AI：MCP 注册中心</th><td><span class="tag">3.0.3+</span></td><td>读取、发布、订阅 MCP server 及其端点。</td></tr>
+            <tr><th scope="row">配置中心 · 服务发现 · 鉴权</th><td><span class="tag">3.0.2+</span></td><td>核心 gRPC 协议与 v3 HTTP OpenAPI；3.0.2 是套件固定的最老服务端。</td></tr>
+            <tr><th scope="row">AI：MCP 注册中心</th><td><span class="tag">3.0.3+</span></td><td>gRPC 读取、发布、订阅；HTTP 传输从 3.3.0 起。</td></tr>
             <tr><th scope="row">AI：Agent Card</th><td><span class="tag">3.1.0+</span></td><td>A2A 智能体名片与 service-backed 端点。</td></tr>
             <tr><th scope="row">AI：Prompt / Skill / Agent Spec</th><td><span class="tag">3.2.0+</span></td><td>Prompt 与 Agent Spec 支持标签解析；Skill 以 ZIP 下发。</td></tr>
-            <tr><th scope="row">分布式锁：租约续期与排队</th><td><span class="tag tag-warm">3.3+</span></td><td>3.2 的锁模块只有获取与释放。</td></tr>
-            <tr><th scope="row">AI：RAD Agent 与推送式 watch</th><td><span class="tag tag-warm">3.3+</span></td><td>服务端推「可能变了」的提示，客户端再读一次。</td></tr>
+            <tr><th scope="row">分布式锁：租约续期与排队</th><td><span class="tag tag-warm">3.3.0+</span></td><td>3.2 的锁模块只有获取与释放。</td></tr>
+            <tr><th scope="row">AI：RAD Agent、推送式 watch 与 HTTP 传输</th><td><span class="tag tag-warm">3.3.0+</span></td><td>服务端推「可能变了」的提示，客户端再读一次；RAD agent 的 HTTP 端点也从 3.3.0 起。</td></tr>
           </tbody>
         </table>
       </div>
@@ -244,6 +244,9 @@ Console.WriteLine(result.Exists ? result.Content : <span class="tok-str">"(not s
         <span class="tok-key">case</span> <span class="tok-type">NacosConfigWatchAdded</span> added:
             Console.WriteLine(<span class="tok-str">$"+ {added.Key}"</span>);
             <span class="tok-key">break</span>;
+        <span class="tok-key">case</span> <span class="tok-type">NacosConfigWatchModified</span> modified:
+            Console.WriteLine(<span class="tok-str">$"~ {modified.Key}"</span>);
+            <span class="tok-key">break</span>;
         <span class="tok-key">case</span> <span class="tok-type">NacosConfigWatchRemoved</span> removed:
             Console.WriteLine(<span class="tok-str">$"- {removed.Key}"</span>);
             <span class="tok-key">break</span>;
@@ -261,6 +264,8 @@ Console.WriteLine(result.Exists ? result.Content : <span class="tok-str">"(not s
 
 <span class="tok-key">await</span> client.Naming.RegisterInstanceAsync(
     service, <span class="tok-key">new</span> <span class="tok-type">NacosInstance</span>(<span class="tok-str">"10.0.0.5"</span>, <span class="tok-num">8080</span>));
+
+<span class="tok-key">var</span> payment = <span class="tok-key">new</span> <span class="tok-type">NacosServiceKey</span>(<span class="tok-str">"payment-service"</span>, NacosConstants.DefaultGroup);
 
 <span class="tok-com">// 一条连接对一个服务只发布一组实例，所以多实例用批量接口。</span>
 <span class="tok-key">await</span> client.Naming.RegisterInstancesAsync(payment, [
@@ -365,11 +370,11 @@ Console.WriteLine(<span class="tok-str">$"{skill.Version} ({skill.Md5}), {skill.
             </tr>
             <tr>
               <th scope="row"><code>Lolitacoding.Aspire.<wbr>Hosting.Nacos</code></th>
-              <td>AppHost 里编排一个 Nacos 服务端容器。</td>
+              <td>AppHost 里编排一个 Nacos 服务端容器，宿主端口由 Aspire 分配。</td>
             </tr>
             <tr>
               <th scope="row"><code>Lolitacoding.Aspire.Nacos</code></th>
-              <td>客户端侧 <code>AddNacosClient(...)</code>，绑定注入的连接串。</td>
+              <td>客户端侧 <code>AddNacosClient(...)</code>，读取注入的连接串与 <code>NACOS_PORT</code> / <code>NACOS_GRPCPORT</code>。</td>
             </tr>
           </tbody>
         </table>

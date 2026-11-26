@@ -37,11 +37,11 @@ PAT：`actions/configure-pages`、`upload-pages-artifact` 和 `deploy-pages` 都
 `GITHUB_TOKEN`。
 
 站点是项目页，地址带仓库名。页面里的 `canonical`、Open Graph、`sitemap.xml`、`robots.txt`
-和 404 的资源路径都已按 `/Lolitacoding.Nacos/` 写好；如果以后绑定自定义域名，这几处要一起改。
+和 404 的资源路径都已按 `/nacos-dotnet/` 写好；仓库再改名或绑定自定义域名时，这几处要一起改。
 
 ## 改内容时注意
 
 - 页面上的版本对照表来自 `docs/faq.md` 与 `docs/releasing.md`，Nacos 支持范围变了要同步。
 - 代码示例必须能编译：它们是从 README 与 `docs/quickstart.md` 抄来的，改了 API 记得一起改。
   配置 watch 的示例使用 `NacosConfigWatchEvent` 的联合类型分支。
-- 数字（单元测试 926、集成测试 64）会随仓库变化，发版前顺手更新。
+- 数字（单元测试 1083、集成测试 77）会随仓库变化，发版前顺手更新。
