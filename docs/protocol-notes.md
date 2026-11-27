@@ -845,7 +845,7 @@ states that it does not have it — a server that says nothing may still serve t
 > `AgentPublishRpcRequestHandler`, `AgentSearchRpcRequestHandler`, `AgentDiscoveryRpcRequestHandler`,
 > `AgentEndpointRegisterRpcRequestHandler` and `AgentEndpointDeregisterRpcRequestHandler` are all
 > marked `@Since("3.3.0")`. The watch that goes with it is gated on its own ability, `radWatchV1`,
-> which the same `v3.3.0-RC` server states and serves (`AgentGrpcWatchService`,
+> which the same `v3.3.0` server states and serves (`AgentGrpcWatchService`,
 > `AgentSubscribeRpcRequestHandler`); a server that does not state it is refused rather than watched
 > without hints.
 

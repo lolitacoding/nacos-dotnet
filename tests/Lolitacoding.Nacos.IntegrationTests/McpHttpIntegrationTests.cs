@@ -22,7 +22,7 @@ namespace Lolitacoding.Nacos.IntegrationTests;
 /// server that serves <see cref="AIIntegrationTests"/> would answer these with a 404.
 /// </para>
 /// <para>
-/// The draft flag is deliberately not exercised here. A stock 3.3.0-RC server refuses a draft
+/// The draft flag is deliberately not exercised here. A stock 3.3.0 server refuses a draft
 /// release with a conflict until its lifecycle cutover has run, so the only thing an integration test
 /// could observe is that migration gate rather than the client. What the client sends is pinned by
 /// the unit tests, and the gRPC path's ability check exists for the same reason.

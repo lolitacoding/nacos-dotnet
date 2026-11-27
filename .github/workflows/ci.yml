@@ -98,7 +98,7 @@ jobs:
       # same tests must hold on the newer servers a caller may deploy.
       fail-fast: false
       matrix:
-        nacos: [v3.0.2, v3.2.4, v3.3.0-RC]
+        nacos: [v3.0.2, v3.2.4, v3.3.0]
     steps:
       - uses: actions/checkout@v4
         with:
@@ -197,7 +197,7 @@ jobs:
           if-no-files-found: ignore
 
   integration-agent:
-    name: Integration tests (agent registry and lock, Nacos v3.3.0-RC)
+    name: Integration tests (agent registry and lock, Nacos v3.3.0)
     runs-on: ubuntu-latest
     needs: build
     steps:
@@ -221,15 +221,15 @@ jobs:
       - name: Warm the image cache
         # The RAD agent handlers, the RAD agent registry's HTTP endpoints, the MCP registry's HTTP
         # endpoints and the renewing lock service are all @Since("3.3.0"), so this job runs on the 3.3
-        # line only, where a release candidate is what is published so far.
-        run: docker pull nacos/nacos-server:v3.3.0-RC
+        # line only, where 3.3.0 is the current GA release.
+        run: docker pull nacos/nacos-server:v3.3.0
 
       - name: Integration tests
         env:
-          NACOS_AGENT_TEST_IMAGE: nacos/nacos-server:v3.3.0-RC
-          NACOS_AGENT_HTTP_TEST_IMAGE: nacos/nacos-server:v3.3.0-RC
-          NACOS_LOCK_TEST_IMAGE: nacos/nacos-server:v3.3.0-RC
-          NACOS_MCP_HTTP_TEST_IMAGE: nacos/nacos-server:v3.3.0-RC
+          NACOS_AGENT_TEST_IMAGE: nacos/nacos-server:v3.3.0
+          NACOS_AGENT_HTTP_TEST_IMAGE: nacos/nacos-server:v3.3.0
+          NACOS_LOCK_TEST_IMAGE: nacos/nacos-server:v3.3.0
+          NACOS_MCP_HTTP_TEST_IMAGE: nacos/nacos-server:v3.3.0
           NO_PROXY: localhost,127.0.0.1
         run: >
           dotnet test tests/Lolitacoding.Nacos.IntegrationTests/Lolitacoding.Nacos.IntegrationTests.csproj

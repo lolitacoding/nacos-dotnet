@@ -66,8 +66,7 @@ internal static class NacosIntegrationImages
     /// <remarks>
     /// It is a separate image because the RAD agent contract is newer than the AI registry's: the
     /// publish, search and discovery handlers are all <c>@Since("3.3.0")</c>, so a 3.2 server answers
-    /// them the way it answers a payload type it has no handler for. The pin is a release candidate
-    /// because that is what the 3.3 line has published so far.
+    /// them the way it answers a payload type it has no handler for. The pin is the 3.3.0 GA release.
     /// </remarks>
     public static readonly string AgentImage =
         Environment.GetEnvironmentVariable("NACOS_AGENT_TEST_IMAGE") is { Length: > 0 } image
@@ -81,8 +80,8 @@ internal static class NacosIntegrationImages
     /// <remarks>
     /// It is a separate image because the client OpenAPI for the MCP registry is younger than the
     /// gRPC one: <c>McpClientController</c> marks its query and release endpoints
-    /// <c>@Since("3.3.0")</c>, while the gRPC handlers exist from 3.0.3 on. The pin is a release
-    /// candidate because that is what the 3.3 line has published so far.
+    /// <c>@Since("3.3.0")</c>, while the gRPC handlers exist from 3.0.3 on. The pin is the 3.3.0 GA
+    /// release.
     /// </remarks>
     public static readonly string McpHttpImage =
         Environment.GetEnvironmentVariable("NACOS_MCP_HTTP_TEST_IMAGE") is { Length: > 0 } image
@@ -97,8 +96,7 @@ internal static class NacosIntegrationImages
     /// It is a separate image because the client OpenAPI for the RAD agent registry is younger than
     /// the gRPC one: <c>AgentClientController</c> marks its publish, search and discovery endpoints
     /// <c>@Since("3.3.0")</c>, while the gRPC handlers exist from the same release but are not gated
-    /// by the A2A migration mode. The pin is a release candidate because that is what the 3.3 line
-    /// has published so far.
+    /// by the A2A migration mode. The pin is the 3.3.0 GA release.
     /// </remarks>
     public static readonly string AgentHttpImage =
         Environment.GetEnvironmentVariable("NACOS_AGENT_HTTP_TEST_IMAGE") is { Length: > 0 } image
@@ -129,37 +127,33 @@ internal static class NacosIntegrationImages
     /// The pinned release the lock tests are checked against.
     /// </summary>
     /// <remarks>
-    /// The lock service belongs to the 3.3 line, of which a release candidate is what is published so
-    /// far. Move this to the final release once there is one.
+    /// The lock service belongs to the 3.3 line, pinned to the 3.3.0 GA release.
     /// </remarks>
-    private const string PinnedLockImage = "nacos/nacos-server:v3.3.0-RC";
+    private const string PinnedLockImage = "nacos/nacos-server:v3.3.0";
 
     /// <summary>
     /// The pinned release the RAD agent tests are checked against.
     /// </summary>
     /// <remarks>
-    /// The 3.3 line, of which a release candidate is what is published so far. Move this to the final
-    /// release once there is one.
+    /// The 3.3 line, pinned to the 3.3.0 GA release.
     /// </remarks>
-    private const string PinnedAgentImage = "nacos/nacos-server:v3.3.0-RC";
+    private const string PinnedAgentImage = "nacos/nacos-server:v3.3.0";
 
     /// <summary>
     /// The pinned release the MCP registry's HTTP transport tests are checked against.
     /// </summary>
     /// <remarks>
-    /// The 3.3 line, of which a release candidate is what is published so far. Move this to the final
-    /// release once there is one.
+    /// The 3.3 line, pinned to the 3.3.0 GA release.
     /// </remarks>
-    private const string PinnedMcpHttpImage = "nacos/nacos-server:v3.3.0-RC";
+    private const string PinnedMcpHttpImage = "nacos/nacos-server:v3.3.0";
 
     /// <summary>
     /// The pinned release the RAD agent registry's HTTP transport tests are checked against.
     /// </summary>
     /// <remarks>
-    /// The 3.3 line, of which a release candidate is what is published so far. Move this to the final
-    /// release once there is one.
+    /// The 3.3 line, pinned to the 3.3.0 GA release.
     /// </remarks>
-    private const string PinnedAgentHttpImage = "nacos/nacos-server:v3.3.0-RC";
+    private const string PinnedAgentHttpImage = "nacos/nacos-server:v3.3.0";
 
     /// <summary>The main HTTP port inside the container.</summary>
     public const int HttpPort = 8848;

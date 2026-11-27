@@ -2,7 +2,9 @@
 
 **Primary source verified against:** `github.com/alibaba/nacos`, branch `develop`, commit
 `1511b5a85f744acb0ad54e8213b1f4d82674799c`, Maven revision **`3.3.0-RC`** (read from `pom.xml`
-line 91). Cross-checked against tags **`2.5.1`** and **`2.4.3`**.
+line 91); the config and naming gRPC surface was re-checked at commit
+`9a5c29a48f453630e6e49aa8223551a423220f00` (2026-11-26, Maven revision **`3.3.0`**).
+Cross-checked against tags **`2.5.1`** and **`2.4.3`**.
 
 Every claim below was read from the actual source (a full shallow clone of `develop`, plus
 `git show <tag>:<path>` for 2.x). Where a claim is derived rather than directly quoted, it is
@@ -144,7 +146,7 @@ line 34 `APPNAME="AppName"`, line 36 `CLIENT_VERSION_KEY="ClientVersion"`, line 
 
 **`"exactMatch"` is UNVERIFIED.** I searched the entire repository (`grep "exactMatch"`); every
 hit is the unrelated `AntPathMatcher` field / AI search boost — **no request header named
-`exactMatch` exists in Nacos 3.3.0-RC.** It is not used in the gRPC path.
+`exactMatch` exists in Nacos 3.3.0.** It is not used in the gRPC path.
 
 **`"namespace"` as a header is also not verified as a header.** Namespace travels as a *body
 field* (`AbstractConfigRequest.tenant`, `AbstractNamingRequest.namespace`) and, for connection
@@ -192,7 +194,7 @@ when the type is not registered.
 
 ### 1.7 JSON engine and exact serialization settings
 
-| | 2.x (verified on `2.5.1`) | develop = 3.3.0-RC |
+| | 2.x (verified on `2.5.1`) | develop = 3.3.0 |
 | --- | --- | --- |
 | Facade | `com.alibaba.nacos.common.utils.JacksonUtils` | `com.alibaba.nacos.api.utils.json.JsonUtils` |
 | Engine | static `ObjectMapper` | pluggable `NacosJsonAdapter`, SPI-selected |

@@ -16,9 +16,9 @@ against — which is also what an override lets a CI run move:
 | MCP server registry | 3.0.3 | `nacos/nacos-server:v3.2.4` | `NACOS_AI_TEST_IMAGE` |
 | A2A agent card registry | 3.1.0 | `nacos/nacos-server:v3.2.4` | `NACOS_AI_TEST_IMAGE` |
 | Prompt, Skill and AgentSpec registries | 3.2.0 | `nacos/nacos-server:v3.2.4` | `NACOS_AI_TEST_IMAGE` |
-| RAD agent registry | 3.3.0 | `nacos/nacos-server:v3.3.0-RC` | `NACOS_AGENT_TEST_IMAGE` |
-| RAD agent watch | 3.3.0 | `nacos/nacos-server:v3.3.0-RC` | `NACOS_AGENT_TEST_IMAGE` |
-| Distributed lock, full contract | 3.3.0 | `nacos/nacos-server:v3.3.0-RC` | `NACOS_LOCK_TEST_IMAGE` |
+| RAD agent registry | 3.3.0 | `nacos/nacos-server:v3.3.0` | `NACOS_AGENT_TEST_IMAGE` |
+| RAD agent watch | 3.3.0 | `nacos/nacos-server:v3.3.0` | `NACOS_AGENT_TEST_IMAGE` |
+| Distributed lock, full contract | 3.3.0 | `nacos/nacos-server:v3.3.0` | `NACOS_LOCK_TEST_IMAGE` |
 
 Where a surface is *served from* an older release than it is *verified against*, the older release
 has not been put through the suite yet; "served from" is the release the upstream contract names,
@@ -42,12 +42,12 @@ Several surfaces are younger than that base release, so their tests choose a ser
   server with `NACOS_AI_TEST_IMAGE`, which defaults to `nacos/nacos-server:v3.2.4`, the oldest release
   all five parts have been checked against.
 - The **RAD agent registry** is younger again: the publish, search, discovery and endpoint handlers are
-  all `@Since("3.3.0")`, so its tests run against `nacos/nacos-server:v3.3.0-RC` and are chosen with
+  all `@Since("3.3.0")`, so its tests run against `nacos/nacos-server:v3.3.0` and are chosen with
   `NACOS_AGENT_TEST_IMAGE`. Unlike the other AI resources it is negotiated strictly — a server has to
   state the RAD ability before the client sends anything — so a 3.2 server is refused with the
   not-implemented code rather than sent a payload it may not route. The **RAD agent watch** — the
   push half of discovery — travels on the same connection and is negotiated on its own ability,
-  `radWatchV1`, which the same `v3.3.0-RC` server states: like the registry it is refused rather than
+  `radWatchV1`, which the same `v3.3.0` server states: like the registry it is refused rather than
   downgraded when the ability is absent or declined, because a watch whose hints are silently dropped
   would stop reporting changes without saying so.
 - The distributed **lock** module belongs to Nacos **3.3**: lease renewal, the wait queue, explicit
@@ -56,7 +56,7 @@ Several surfaces are younger than that base release, so their tests choose a ser
   lock, but it cannot renew one — a refused renewal ends the lease locally, so the caller learns about
   it rather than holding a lock the server has already dropped — and a request that would queue is
   refused instead. The lock tests choose their server with `NACOS_LOCK_TEST_IMAGE`, which defaults to
-  `nacos/nacos-server:v3.3.0-RC`. Which is which is described in
+  `nacos/nacos-server:v3.3.0`. Which is which is described in
   [the protocol notes](protocol-notes.md#distributed-lock-specifics).
 
 The `test` type label and the payload type names differ subtly between upstream versions and Java

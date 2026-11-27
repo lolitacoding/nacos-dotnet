@@ -22,7 +22,7 @@ namespace Lolitacoding.Nacos.IntegrationTests;
 /// type it has no handler for.
 /// </para>
 /// <para>
-/// The stock 3.3.0-RC server gates these endpoints behind <c>AgentClientMigrationGuard</c>, which
+/// The stock 3.3.0 server gates these endpoints behind <c>AgentClientMigrationGuard</c>, which
 /// admits them only while <c>nacos.ai.a2a.compatibility.mode</c> is <c>CANONICAL</c> — the default.
 /// A deployment left on a historical A2A mode answers with a conflict instead, which the client
 /// reports as the server's error code rather than retrying.
