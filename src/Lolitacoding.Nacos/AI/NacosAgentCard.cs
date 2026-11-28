@@ -1,4 +1,5 @@
 using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace Lolitacoding.Nacos.AI;
 
@@ -82,8 +83,22 @@ public class NacosAgentCard
     /// </remarks>
     public List<Dictionary<string, List<string>>>? Security { get; set; }
 
-    /// <summary>Gets or sets the extended security requirements, when the agent publishes them.</summary>
-    public List<Dictionary<string, List<string>>>? SecurityRequirements { get; set; }
+    /// <summary>Gets or sets the security requirements a caller has to satisfy.</summary>
+    /// <remarks>
+    /// <para>
+    /// This is the A2A 1.0 shape: a list of alternatives, each naming the schemes it needs and the
+    /// scopes within them. The older <see cref="Security"/> member carries the same information in
+    /// the flat 0.3 shape and stays available for servers that still use it.
+    /// </para>
+    /// <para>
+    /// Reading accepts both shapes, because a card stored before the standard model was adopted is
+    /// still served in the flat one. Writing always uses the standard shape, which a server from the
+    /// 3.3.1 line on understands; a 3.3.0 server only reads the flat shape, so publish the older
+    /// <see cref="Security"/> member to one of those.
+    /// </para>
+    /// </remarks>
+    [JsonConverter(typeof(NacosAgentCardSecurityRequirementsConverter))]
+    public List<NacosAgentSecurityRequirement>? SecurityRequirements { get; set; }
 
     /// <summary>Gets or sets the input media types the agent accepts by default.</summary>
     public List<string>? DefaultInputModes { get; set; }
@@ -148,6 +163,36 @@ public sealed class NacosAgentInterface
 }
 
 /// <summary>
+/// One alternative in an A2A 1.0 card's security requirements.
+/// </summary>
+/// <remarks>
+/// All schemes in one requirement have to be satisfied together; separate requirements in the list
+/// are alternatives. The standard JSON shape is <c>{"schemes":{"oauth2":{"list":["read"]}}}</c>.
+/// A card also accepts the older flat <c>{"oauth2":["read"]}</c> shape on read; a skill does not.
+/// </remarks>
+public sealed class NacosAgentSecurityRequirement
+{
+    /// <summary>Gets or sets the schemes this requirement needs, keyed by scheme name.</summary>
+    public Dictionary<string, NacosAgentSecurityScope>? Schemes { get; set; }
+}
+
+/// <summary>
+/// The scopes a security scheme requires within one requirement.
+/// </summary>
+/// <remarks>
+/// This is the A2A 1.0 <c>StringList</c>: a JSON object with an optional <c>list</c> member. An
+/// omitted list means no scopes are required for that scheme.
+/// </remarks>
+public sealed class NacosAgentSecurityScope
+{
+    /// <summary>
+    /// Gets or sets the scope names; <see langword="null"/> means the member was omitted, which
+    /// the protocol defines as an empty list.
+    /// </summary>
+    public List<string>? List { get; set; }
+}
+
+/// <summary>
 /// One skill an agent offers.
 /// </summary>
 /// <remarks>
@@ -176,6 +221,17 @@ public sealed class NacosAgentSkill
 
     /// <summary>Gets or sets the output media types the skill produces.</summary>
     public List<string>? OutputModes { get; set; }
+
+    /// <summary>
+    /// Gets or sets the security requirements a caller has to satisfy to use this skill.
+    /// </summary>
+    /// <remarks>
+    /// This is the same A2A 1.0 shape as the card's member, but the member is additive and never had
+    /// a flat form: a flat requirement is refused rather than decoded into one that lost its scopes.
+    /// A server from the 3.3.1 line on keeps it when the skill is served.
+    /// </remarks>
+    [JsonConverter(typeof(NacosAgentSkillSecurityRequirementsConverter))]
+    public List<NacosAgentSecurityRequirement>? SecurityRequirements { get; set; }
 }
 
 /// <summary>

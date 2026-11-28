@@ -87,7 +87,7 @@ Lolitacoding.Nacos.AI.NacosAgentCard.Provider.get -> Lolitacoding.Nacos.AI.Nacos
 Lolitacoding.Nacos.AI.NacosAgentCard.Provider.set -> void
 Lolitacoding.Nacos.AI.NacosAgentCard.Security.get -> System.Collections.Generic.List<System.Collections.Generic.Dictionary<string!, System.Collections.Generic.List<string!>!>!>?
 Lolitacoding.Nacos.AI.NacosAgentCard.Security.set -> void
-Lolitacoding.Nacos.AI.NacosAgentCard.SecurityRequirements.get -> System.Collections.Generic.List<System.Collections.Generic.Dictionary<string!, System.Collections.Generic.List<string!>!>!>?
+Lolitacoding.Nacos.AI.NacosAgentCard.SecurityRequirements.get -> System.Collections.Generic.List<Lolitacoding.Nacos.AI.NacosAgentSecurityRequirement!>?
 Lolitacoding.Nacos.AI.NacosAgentCard.SecurityRequirements.set -> void
 Lolitacoding.Nacos.AI.NacosAgentCard.SecuritySchemes.get -> System.Collections.Generic.Dictionary<string!, System.Text.Json.JsonElement>?
 Lolitacoding.Nacos.AI.NacosAgentCard.SecuritySchemes.set -> void
@@ -300,6 +300,14 @@ Lolitacoding.Nacos.AI.NacosAgentSearchRequest.ProtocolsAny.get -> System.Collect
 Lolitacoding.Nacos.AI.NacosAgentSearchRequest.ProtocolsAny.set -> void
 Lolitacoding.Nacos.AI.NacosAgentSearchRequest.TagsAll.get -> System.Collections.Generic.List<string!>?
 Lolitacoding.Nacos.AI.NacosAgentSearchRequest.TagsAll.set -> void
+Lolitacoding.Nacos.AI.NacosAgentSecurityRequirement
+Lolitacoding.Nacos.AI.NacosAgentSecurityRequirement.NacosAgentSecurityRequirement() -> void
+Lolitacoding.Nacos.AI.NacosAgentSecurityRequirement.Schemes.get -> System.Collections.Generic.Dictionary<string!, Lolitacoding.Nacos.AI.NacosAgentSecurityScope!>?
+Lolitacoding.Nacos.AI.NacosAgentSecurityRequirement.Schemes.set -> void
+Lolitacoding.Nacos.AI.NacosAgentSecurityScope
+Lolitacoding.Nacos.AI.NacosAgentSecurityScope.List.get -> System.Collections.Generic.List<string!>?
+Lolitacoding.Nacos.AI.NacosAgentSecurityScope.List.set -> void
+Lolitacoding.Nacos.AI.NacosAgentSecurityScope.NacosAgentSecurityScope() -> void
 Lolitacoding.Nacos.AI.NacosAgentSkill
 Lolitacoding.Nacos.AI.NacosAgentSkill.Description.get -> string?
 Lolitacoding.Nacos.AI.NacosAgentSkill.Description.set -> void
@@ -314,6 +322,8 @@ Lolitacoding.Nacos.AI.NacosAgentSkill.Name.get -> string?
 Lolitacoding.Nacos.AI.NacosAgentSkill.Name.set -> void
 Lolitacoding.Nacos.AI.NacosAgentSkill.OutputModes.get -> System.Collections.Generic.List<string!>?
 Lolitacoding.Nacos.AI.NacosAgentSkill.OutputModes.set -> void
+Lolitacoding.Nacos.AI.NacosAgentSkill.SecurityRequirements.get -> System.Collections.Generic.List<Lolitacoding.Nacos.AI.NacosAgentSecurityRequirement!>?
+Lolitacoding.Nacos.AI.NacosAgentSkill.SecurityRequirements.set -> void
 Lolitacoding.Nacos.AI.NacosAgentSkill.Tags.get -> System.Collections.Generic.List<string!>?
 Lolitacoding.Nacos.AI.NacosAgentSkill.Tags.set -> void
 Lolitacoding.Nacos.AI.NacosAgentSpec

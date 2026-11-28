@@ -794,6 +794,14 @@ states that it does not have it — a server that says nothing may still serve t
   `Required parameter 'agentCard.supportedInterfaces' not present, and old protocol fields … are
   incomplete`. That is why a card published for a service endpoint still declares an interface even
   though no runtime endpoint exists yet.
+- **Security requirements use the A2A 1.0 shape.** Card-level and skill-level
+  `securityRequirements` are `[{"schemes":{"oauth2":{"list":["read"]}}}]`, and an omitted `list`
+  means an empty scope list. A card stored before the standard model was adopted is still served in
+  the flat `[{"oauth2":["read"]}]` shape, so card reads accept both; writes use the standard shape,
+  which a server from the 3.3.1 line on understands. The skill-level member is additive and never
+  had a flat form, so a flat skill requirement is refused rather than decoded into one that lost its
+  scopes. A 3.3.0 server only reads the flat shape, where the deprecated `security` member is the one
+  to publish. Missing requirements, a null member and an empty list stay distinct.
 - **A `SERVICE` card's address is assembled at read time.** The card is stored as it was published,
   and the read then looks up the Naming service named after `{agentName}::{version}` in the agent
   endpoint group. When that service has instances, they replace the card's `supportedInterfaces`,
