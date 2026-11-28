@@ -599,7 +599,12 @@ internal sealed class NacosConfigClient : INacosConfigClient, IDisposable
                 DateTimeOffset.MinValue, fromLocalCache: false);
         }
 
-        if (string.IsNullOrEmpty(response.Content))
+        // Only the not-found code above means the configuration is absent. Empty and
+        // whitespace-only content is a value the server stored, so it is returned unchanged;
+        // treating it as missing would also remove the snapshot and make a later outage report
+        // an existing configuration as gone. A null body remains null, the protocol's own
+        // "no content" marker.
+        if (response.Content is null)
         {
             return new NacosConfigResult(
                 key, content: null, md5: response.Md5, contentType: response.ContentType,

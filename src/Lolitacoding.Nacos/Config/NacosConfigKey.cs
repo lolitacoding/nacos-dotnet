@@ -77,7 +77,10 @@ public sealed record NacosConfigResult
     /// Initializes a new instance of the <see cref="NacosConfigResult"/> record.
     /// </summary>
     /// <param name="key">The configuration that was read.</param>
-    /// <param name="content">The content, or <see langword="null"/> when it does not exist.</param>
+    /// <param name="content">
+    /// The content, or <see langword="null"/> when it does not exist. An empty or whitespace-only
+    /// string is content the server stored, not an absence.
+    /// </param>
     /// <param name="md5">The content hash reported by the server.</param>
     /// <param name="contentType">The content type, for example <c>text</c> or <c>json</c>.</param>
     /// <param name="lastModified">The last modification time.</param>
@@ -109,6 +112,10 @@ public sealed record NacosConfigResult
     /// <summary>
     /// Gets the configuration content, or <see langword="null"/> when it does not exist.
     /// </summary>
+    /// <remarks>
+    /// A configuration may exist with an empty or whitespace-only value; that is returned as the
+    /// string the server stores. Only <see langword="null"/> means the configuration is absent.
+    /// </remarks>
     public string? Content { get; }
 
     /// <summary>Gets the content hash reported by the server.</summary>
@@ -141,7 +148,13 @@ public sealed record NacosConfigResult
     /// </remarks>
     public bool FromLocalCache { get; }
 
-    /// <summary>Gets a value indicating whether the configuration exists.</summary>
+    /// <summary>
+    /// Gets a value indicating whether the configuration exists.
+    /// </summary>
+    /// <remarks>
+    /// Existence is decided by the server's answer, not by the text: a configuration that stores
+    /// an empty or whitespace-only value exists and has that value as its <see cref="Content"/>.
+    /// </remarks>
     public bool Exists => Content is not null;
 }
 

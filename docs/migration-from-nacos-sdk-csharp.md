@@ -73,7 +73,9 @@ var instance = new NacosInstance(
 ## Results instead of exceptions for "not found"
 
 `GetConfigAsync` returns a `NacosConfigResult`, not a `string?`. A configuration that does not exist
-sets `Exists` to `false` and `Content` to `null`; it is not reported as an error.
+sets `Exists` to `false` and `Content` to `null`; it is not reported as an error. An existing
+configuration may store an empty or whitespace-only value, in which case `Exists` is `true` and
+`Content` is that text — blank content is not treated as a missing configuration.
 
 ```csharp
 NacosConfigResult result = await client.Config.GetConfigAsync(configKey);

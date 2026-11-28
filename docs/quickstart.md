@@ -56,7 +56,9 @@ await client.Config.PublishConfigAsync(key, """{"App":{"Greeting":"hello"}}""", 
 ```
 
 `GetConfigAsync` returns a `NacosConfigResult`; inspect `Content` (may be `null`), `Exists`, `Md5`
-and `FromLocalCache`. A missing configuration is not an error.
+and `FromLocalCache`. A missing configuration is not an error. A configuration that exists with an
+empty or whitespace-only value has `Exists == true` and that text as its `Content`; only a missing
+one has `Content == null`.
 
 When you already hold a version and want to skip re-downloading it, pass its hash:
 `GetConfigConditionalAsync(key, current.Md5!)`. The server answers `304` and the client returns the

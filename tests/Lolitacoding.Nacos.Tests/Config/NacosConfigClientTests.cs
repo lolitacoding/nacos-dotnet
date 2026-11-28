@@ -63,6 +63,23 @@ public sealed class NacosConfigClientTests
         result.Md5.ShouldBe(NacosMd5.Compute("hello"));
     }
 
+    [Theory]
+    [InlineData("")]
+    [InlineData(" ")]
+    [InlineData("\n\t")]
+    public async Task GetConfig_ReturnsBlankContentAsAnExistingConfiguration(string content)
+    {
+        // A formal configuration may store an empty or whitespace-only value. Only the not-found
+        // code means absence, so the text must come back unchanged rather than as null.
+        using Harness harness = CreateHarness(_ => QueryResponse(content, "text"));
+
+        NacosConfigResult result = await harness.GetAsync(Key, TestContext.Current.CancellationToken);
+
+        result.Exists.ShouldBeTrue();
+        result.Content.ShouldBe(content);
+        result.Md5.ShouldBe(NacosMd5.Compute(content));
+    }
+
     [Fact]
     public async Task GetConfig_SendsNamespaceGroupAndDataId()
     {
@@ -508,6 +525,26 @@ public sealed class NacosConfigClientTests
         NacosConfigResult result = await harness.GetAsync(Key, TestContext.Current.CancellationToken);
 
         result.Content.ShouldBe("published");
+        result.FromLocalCache.ShouldBeTrue();
+    }
+
+    [Fact]
+    public async Task GetConfig_KeepsBlankContentInTheSnapshot()
+    {
+        // Blank content is a stored value, so an outage must restore it rather than report the
+        // configuration missing and delete the snapshot that held it.
+        using Harness harness = CreateHarness(
+            _ => QueryResponse(string.Empty, "text"), snapshots: true);
+
+        (await harness.GetAsync(Key, TestContext.Current.CancellationToken))
+            .Exists.ShouldBeTrue();
+
+        harness.Handler = _ => throw new NacosConnectionException("server is down");
+
+        NacosConfigResult result = await harness.GetAsync(Key, TestContext.Current.CancellationToken);
+
+        result.Exists.ShouldBeTrue();
+        result.Content.ShouldBe(string.Empty);
         result.FromLocalCache.ShouldBeTrue();
     }
 
